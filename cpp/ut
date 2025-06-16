@@ -3,4 +3,4 @@
 set -x
 cd build
 cmake ..
-cmake --build . && ctest
+cmake --build . && ctest --output-on-failure

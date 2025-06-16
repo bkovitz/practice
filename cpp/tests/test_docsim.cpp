@@ -6,7 +6,7 @@ TEST(TestDocsim, Run) {
 }
 
 TEST(TestDocsim, MakeWordSet) {
-  const std::unordered_set<std::string> expect = {"blah", "de"};
+  const std::set<std::string> expect = {"blah", "de"};
 
   auto got = make_word_set(" Blah de blah.");
   EXPECT_EQ(got, expect);
@@ -16,5 +16,5 @@ TEST(TestDocsim, Basic) {
   std::string q = "que BLah?";
   std::string d = "Blah de BLAH, blah  blah ";
 
-  EXPECT_EQ(similarity(q, d), 0.0);
+  EXPECT_FLOAT_EQ(similarity(q, d), 0.5);
 }
