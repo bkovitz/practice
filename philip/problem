@@ -1,0 +1,44 @@
+You're a senior engineer at YouTube working on a real-time video quality monitoring system. YouTube measures streaming quality using scores from 0-100, sampled every second from active viewers.
+To detect quality issues robustly, your team has decided that tracking the median quality score (rather than average) provides better insights, since it's less affected by outliers from users with poor connections.
+Your task: Design a data structure that can efficiently:
+
+Add a new quality score as it arrives from the monitoring system
+Get the current median of all scores received so far
+
+Example:
+addScore(85) → median = 85.0
+addScore(78) → median = 81.5
+addScore(92) → median = 85.0
+
+
+class MedianTracker:
+    def __init__(self):
+        # Initialize your data structure
+        
+    def addScore(self, score: int) -> None:
+        # Add a new quality score
+        
+    def getMedian(self) -> float:
+        # Return the current median of all scores
+
+
+If he needs more examples:
+addScore(85) → current scores: [85] → median = 85.0
+addScore(78) → current scores: [78, 85] → median = 81.5
+addScore(92) → current scores: [78, 85, 92] → median = 85.0
+addScore(45) → current scores: [45, 78, 85, 92] → median = 81.5
+addScore(88) → current scores: [45, 78, 85, 88, 92] → median = 85.0
+
+
+
+Follow-up:
+
+YouTube has realized that keeping all historical data isn't ideal for detecting current quality issues. A quality drop from 2 hours ago isn't relevant for real-time monitoring, and the system needs to be more responsive to recent trends.
+Your new task: Modify your system to only track the median of the last K quality scores. As new scores arrive, old scores should be automatically removed.
+Example with K=3:
+addScore(85) → window: [85] → median = 85.0
+addScore(78) → window: [85, 78] → median = 81.5  
+addScore(92) → window: [85, 78, 92] → median = 85.0
+addScore(45) → window: [78, 92, 45] → median = 78.0  (85 removed)
+addScore(88) → window: [92, 45, 88] → median = 88.0  (78 removed)
+addScore(91) → window: [45, 88, 91] → median = 88.0  (92 removed)

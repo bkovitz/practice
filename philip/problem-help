@@ -1,0 +1,213 @@
+How to Be a Good Interviewer:
+1. Guide Them to the Two Heaps Approach:
+
+If they suggest sorting each time: "That works, but YouTube processes thousands of scores per second. Can we do better than O(n log n) per addition?"
+If they suggest keeping a sorted array: "Good thinking! Insertion will be O(n) though. Can we use a different data structure?"
+Hint toward heaps: "What if we could know the median without looking at all elements? What properties would help us?"
+
+2. Key Questions to Ask:
+
+"How do you handle the case where we have an even vs odd number of elements?"
+"What invariants do your heaps maintain?"
+"Walk me through adding 85, then 78, then 92. What happens to your heaps?"
+
+3. Common Mistakes to Watch For:
+
+Forgetting to negate values for max heap in Python (Python only has min heap)
+Incorrect balancing logic - forgetting that max heap can have 1 extra element
+Wrong median calculation for even number of elements
+Not handling edge cases like first element or empty structure
+
+4. Verification Walkthrough:
+Add 85: max_heap=[-85], min_heap=[] → median = 85.0
+Add 78: max_heap=[-85], min_heap=[78] (78 moved to min) → median = 81.5
+Add 92: max_heap=[-85], min_heap=[78, 92] → rebalance → max_heap=[-85, -78], min_heap=[92] → median = 78.0
+5. Edge Cases to Test:
+
+First element added
+Two elements (even case)
+All elements the same
+Strictly increasing/decreasing sequence
+
+6. Complexity Analysis:
+
+Time: O(log n) for both addScore and getMedian
+Space: O(n) for storing all elements
+
+7. Follow-up Discussion:
+
+"This is great for unlimited data. But what if YouTube only cares about the last K seconds of data?"
+This naturally leads to Phase 2: Sliding Window
+
+Alternative Approaches (Less Optimal):
+
+Sorted Array + Binary Search: O(n) insertion, O(1) median
+Simple Array + Sort: O(n log n) per addition
+Balanced BST: O(log n) but more complex implementation
+
+The two heaps approach is the sweet spot of efficiency and implementability!
+
+----------------------------------------------------------------------
+
+Optimal Approach: Two Heaps + Lazy Removal
+Key Challenge: Heaps don't support efficient removal of arbitrary elements. The clever solution is "lazy removal" - keep invalid elements in heaps but ignore them when they reach the top.
+Complete Solution:
+pythonimport heapq
+from collections import defaultdict
+
+class SlidingWindowMedian:
+    def __init__(self, k: int):
+        self.k = k
+        self.window = []  # stores actual window elements in order
+        self.max_heap = []  # smaller half (negated values)
+        self.min_heap = []  # larger half
+        self.to_remove = defaultdict(int)  # count of elements to remove
+        
+    def addScore(self, score: int) -> None:
+        # Add to window
+        self.window.append(score)
+        
+        # Remove oldest if window exceeds size k
+        if len(self.window) > self.k:
+            old_val = self.window.pop(0)
+            self.to_remove[old_val] += 1
+        
+        # Add new score to appropriate heap
+        if not self.max_heap or score <= -self.max_heap[0]:
+            heapq.heappush(self.max_heap, -score)
+        else:
+            heapq.heappush(self.min_heap, score)
+        
+        # Balance heaps and clean invalid elements
+        self._balance_heaps()
+    
+    def _balance_heaps(self):
+        # Remove invalid elements from heap tops
+        while self.max_heap and self.to_remove[-self.max_heap[0]] > 0:
+            val = -heapq.heappop(self.max_heap)
+            self.to_remove[val] -= 1
+            
+        while self.min_heap and self.to_remove[self.min_heap[0]] > 0:
+            val = heapq.heappop(self.min_heap)
+            self.to_remove[val] -= 1
+        
+        # Calculate valid sizes
+        max_size = len(self.max_heap) - sum(self.to_remove[-x] for x in self.max_heap)
+        min_size = len(self.min_heap) - sum(self.to_remove[x] for x in self.min_heap)
+        
+        # Rebalance if needed
+        if max_size > min_size + 1:
+            val = -heapq.heappop(self.max_heap)
+            while self.to_remove[val] > 0:
+                self.to_remove[val] -= 1
+                val = -heapq.heappop(self.max_heap)
+            heapq.heappush(self.min_heap, val)
+        elif min_size > max_size:
+            val = heapq.heappop(self.min_heap)
+            while self.to_remove[val] > 0:
+                self.to_remove[val] -= 1
+                val = heapq.heappop(self.min_heap)
+            heapq.heappush(self.max_heap, -val)
+    
+    def getMedian(self) -> float:
+        self._balance_heaps()  # Clean heaps first
+        
+        valid_size = len(self.window)
+        if valid_size % 2 == 1:
+            return float(-self.max_heap[0])
+        else:
+            return (-self.max_heap[0] + self.min_heap[0]) / 2.0
+Simpler Alternative: Array + Binary Search
+pythonimport bisect
+
+class SlidingWindowMedian:
+    def __init__(self, k: int):
+        self.k = k
+        self.window = []
+        self.sorted_window = []
+    
+    def addScore(self, score: int) -> None:
+        # Add new score
+        self.window.append(score)
+        bisect.insort(self.sorted_window, score)
+        
+        # Remove oldest if needed
+        if len(self.window) > self.k:
+            old_val = self.window.pop(0)
+            idx = bisect.bisect_left(self.sorted_window, old_val)
+            self.sorted_window.pop(idx)
+    
+    def getMedian(self) -> float:
+        n = len(self.sorted_window)
+        if n % 2 == 1:
+            return float(self.sorted_window[n // 2])
+        else:
+            return (self.sorted_window[n // 2 - 1] + self.sorted_window[n // 2]) / 2.0
+How to Be a Good Interviewer:
+1. Guide Them Through the Challenge:
+
+If they try to modify Phase 1 directly: "How do you remove an arbitrary element from a heap? That's not a standard heap operation."
+If they suggest rebuilding heaps: "That works, but what's the time complexity? Can we do better?"
+Guide toward lazy removal: "What if we don't immediately remove elements, but mark them as 'invalid' instead?"
+
+2. Key Questions to Ask:
+
+"What happens when you need to remove an element that's not at the top of either heap?"
+"How do you maintain the heap invariants when elements become 'stale'?"
+"What's the time complexity of your approach?"
+"How do you handle the case where the top of a heap contains an invalid element?"
+
+3. Common Approaches They Might Try:
+Approach 1: Rebuild Heaps Each Time
+
+Time: O(k log k) per operation
+Guide them: "This works but is expensive. Can we avoid rebuilding?"
+
+Approach 2: Remove from Heaps Directly
+
+Heaps don't support O(log n) arbitrary removal
+Guide them: "Standard heaps only support removing the min/max. What alternatives do we have?"
+
+Approach 3: Lazy Removal (Optimal)
+
+Keep invalid elements, clean when they reach the top
+Time: O(log k) amortized
+
+Approach 4: Sorted Array (Simpler)
+
+Use bisect for insertions/deletions
+Time: O(k) per operation but simpler code
+
+4. Verification Walkthrough (K=3):
+addScore(85): window=[85], heaps: max=[-85], min=[] → median=85.0
+addScore(78): window=[85,78], heaps: max=[-85], min=[78] → median=81.5
+addScore(92): window=[85,78,92], heaps: max=[-85], min=[78,92] → median=85.0
+addScore(45): window=[78,92,45], remove 85, heaps need cleaning → median=78.0
+5. Edge Cases to Test:
+
+Window not yet full (< K elements)
+All elements the same
+K = 1 (always return the single element)
+Removing elements that affect median position
+
+6. Complexity Analysis:
+
+Lazy Removal: O(log k) average, O(k log k) worst case per operation
+Array + Binary Search: O(k) per operation
+Space: O(k) for both approaches
+
+7. Discussion Points:
+
+"Which approach would you choose in production? Why?"
+"How would you handle very large K values?"
+"What if scores could be duplicates?"
+"How would you test this system?"
+
+Production Considerations:
+
+For small K (< 100): Array approach is simpler and fine
+For large K (> 1000): Lazy removal with heaps is better
+Memory efficiency: Important for real-time systems
+Thread safety: Multiple threads adding scores simultaneously
+
+The key insight is recognizing that heap removal is the bottleneck and finding creative ways around it!
