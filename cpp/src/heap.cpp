@@ -58,10 +58,8 @@ namespace heap {
   }
 
   void build_min_heap(std::vector<int>& vec) {
-    for (index_t i = (vec.size() - 1) >> 1; i >= 0; i--) {
+    for (index_t i = (vec.size() - 1) >> 1; i >= 0; i--)
       heapify(vec, i);
-      //std::cout << i << ' ' << vec << std::endl;
-    }
   }
 
   void heapsort(std::vector<int>& vec) {
