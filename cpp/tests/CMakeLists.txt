@@ -7,7 +7,7 @@ target_include_directories(test_docsim PRIVATE ../include)
 target_link_libraries(test_docsim gtest_main)
 #add_test(NAME TestDocsim COMMAND test_docsim)
 
-add_executable(test_heap test_heap.cpp ../src/heap.cpp)
+add_executable(test_heap test_heap.cpp ../src/heap.cpp ../src/util.cpp)
 target_include_directories(test_heap PRIVATE ../include)
 target_link_libraries(test_heap gtest_main)
 
