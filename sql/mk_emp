@@ -1,0 +1,13 @@
+CREATE TABLE employee (
+   id SERIAL PRIMARY KEY,
+   name TEXT,
+   department TEXT,
+   salary NUMERIC
+);
+
+INSERT INTO employee (name, department, salary) VALUES
+    ('Alice', 'HR', 50000),
+    ('Bob', 'Engineering', 80000),
+    ('Carol', 'Engineering', 85000),
+    ('Dave', 'Sales', 60000);
+   

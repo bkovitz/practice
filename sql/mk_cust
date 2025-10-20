@@ -1,0 +1,22 @@
+CREATE TABLE customers (
+    id SERIAL PRIMARY KEY,
+    name TEXT
+);
+
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES customers(id),
+    amount NUMERIC(10,2),
+    order_date DATE
+);
+
+INSERT INTO customers (name) VALUES
+  ('Alice'), ('Bob'), ('Carol');
+
+INSERT INTO orders (customer_id, amount, order_date) VALUES
+  (1, 25.00, '2024-06-01'),
+  (1, 40.00, '2024-06-03'),
+  (2, 35.00, '2024-06-05'),
+  (3, 10.00, '2024-06-06'),
+  (2, 70.00, '2024-06-09');
+
