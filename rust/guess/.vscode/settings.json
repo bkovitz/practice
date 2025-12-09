@@ -1,0 +1,4 @@
+{
+  "editor.inlineSuggest.enabled": false,
+  "rust-analyzer.lens.enable": false
+}
