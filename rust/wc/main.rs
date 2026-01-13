@@ -51,53 +51,65 @@ impl<'a> Reportable for TextStats<'a> {
     }
 }
 
-fn wc<'a>(s: &'a str) -> TextStats<'a> {
-    let mut state = State::NotInWord;
-    let mut num_words: usize = 0;
-    let mut num_lines: usize = 0;
+fn print_report<T: Reportable>(r: &T) {
+    println!("{}", r.report());
+}
 
-    for c in s.chars() {
-        if c == '\n' {
+//fn wc<'a>(s: &'a str) -> TextStats<'a> {
+impl<'a> TextStats<'a> {
+    pub fn new(s: &'a str) -> Self {
+        let mut state = State::NotInWord;
+        let mut num_words: usize = 0;
+        let mut num_lines: usize = 0;
+
+        for c in s.chars() {
+            if c == '\n' {
+                num_lines += 1;
+            }
+            match state {
+                State::NotInWord => {
+                    if !c.is_whitespace() {
+                        num_words += 1;
+                        state = State::InWord;
+                    }
+                }
+                State::InWord => {
+                    if c.is_whitespace() {
+                        state = State::NotInWord;
+                    }
+                }
+            }
+        }
+        if s.len() > 0 && !s.ends_with('\n') {
             num_lines += 1;
         }
-        match state {
-            State::NotInWord => {
-                if !c.is_whitespace() {
-                    num_words += 1;
-                    state = State::InWord;
-                }
-            }
-            State::InWord => {
-                if c.is_whitespace() {
-                    state = State::NotInWord;
-                }
-            }
-        }
+        TextStats { s, num_words, num_lines }
     }
-    if !s.ends_with('\n') {
-        num_lines += 1;
-    }
-    TextStats { s, num_words, num_lines }
 }
 
 fn main () {
-    let text_stats = wc("If lose mittens, get\nno pie.\n");
+    let text_stats = TextStats::new("If lose mittens, get\nno pie.\n");
     println!("{:#?}", text_stats);
     println!("{}", text_stats.summary());
-    println!("{}", text_stats.report());
+    print_report(&text_stats);
     println!();
-    let text_stats = wc("Two words.");
+    let text_stats = TextStats::new("Two words.");
     println!("{:#?}", text_stats);
     println!("{}", text_stats.summary());
-    println!("{}", text_stats.report());
+    print_report(&text_stats);
     println!();
-    let text_stats = wc("This one is five words.");
+    let text_stats = TextStats::new("This one is five words.");
     println!("{:#?}", text_stats);
     println!("{}", text_stats.summary());
-    println!("{}", text_stats.report());
+    print_report(&text_stats);
     println!();
-    let text_stats = wc("This one is four.");
+    let text_stats = TextStats::new("This one is four.");
     println!("{:#?}", text_stats);
     println!("{}", text_stats.summary());
-    println!("{}", text_stats.report());
+    print_report(&text_stats);
+    println!();
+    let text_stats = TextStats::new("");
+    println!("{:#?}", text_stats);
+    println!("{}", text_stats.summary());
+    print_report(&text_stats);
 }
