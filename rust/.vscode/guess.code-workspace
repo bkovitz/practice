@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../guess"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"rust-analyzer.lens.enable": false
+	}
+}

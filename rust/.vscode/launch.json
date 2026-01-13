@@ -14,6 +14,35 @@
             "preLaunchTask": "rustc: build active file",
             "console": "integratedTerminal",
             "sourceLanguages": ["rust"]
+        },
+        {
+            "name": "Run current file (no debug)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/release/${fileBasenameNoExtension}",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "cargo: build release current file (no debug)",
+            "terminal": "integratedTerminal",
+            "noDebug": true
+        },
+        {
+            "name": "Debug workspace binary (lldb)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/debug/${workspaceFolderBasename}",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "cargo build"
+        },
+        {
+            "name": "Debug workspace binary (current file alias)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/debug/${fileBasenameNoExtension}",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "cargo build current file"
         }
     ]
 }

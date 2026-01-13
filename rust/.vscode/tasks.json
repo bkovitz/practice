@@ -19,7 +19,57 @@
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "cargo: build release current file (no debug)",
+            "type": "shell",
+            "command": "bash -lc 'set -e; RUSTFLAGS=\"-C debuginfo=0\" cargo build --release --bin \"${fileBasenameNoExtension}\" 2>/dev/null || RUSTFLAGS=\"-C debuginfo=0\" cargo build --release'",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run current exe (no lldb)",
+            "type": "shell",
+            "dependsOn": "cargo: build release current file (no debug)",
+            "command": "bash -lc 'exe=\"target/release/${fileBasenameNoExtension}\"; if [ ! -x \"$exe\" ]; then exe=\"target/release/${workspaceFolderBasename}\"; fi; exec \"$exe\"'",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "cargo build",
+            "type": "shell",
+            "command": "cargo build",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$rustc"
+            ]
+        },
+        {
+            "label": "cargo build current file",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "build",
+                "--bin",
+                "${fileBasenameNoExtension}"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ]
         }
     ]
 }
-
