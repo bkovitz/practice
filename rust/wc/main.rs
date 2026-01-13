@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 struct TextStats<'a> {
     s: &'a str,
     num_words: usize,
@@ -12,19 +12,8 @@ impl<'a> TextStats<'a> {
             Some(i) => &self.s[..i],
         }
     }
-}
 
-trait Reportable {
-    fn report(&self) -> String;
-}
-
-enum State {
-    NotInWord,
-    InWord
-}
-
-impl<'a> Reportable for TextStats<'a> {
-    fn report(&self) -> String {
+    fn preview(&self) -> String {
         let mut state = State::NotInWord;
         let mut after_4_words = self.s.len();
         let mut word_num: u32 = 0;
@@ -47,7 +36,22 @@ impl<'a> Reportable for TextStats<'a> {
                 }
             }
         }
-        format!("Lines: {}\nWords: {}\nPreview: {}...", self.num_lines, self.num_words, &self.s[..after_4_words])
+        format!("{}...", &self.s[..after_4_words])
+    }
+}
+
+trait Reportable {
+    fn report(&self) -> String;
+}
+
+enum State {
+    NotInWord,
+    InWord
+}
+
+impl<'a> Reportable for TextStats<'a> {
+    fn report(&self) -> String {
+        format!("Lines: {}\nWords: {}\nPreview: {}\n", self.num_lines, self.num_words, self.preview())
     }
 }
 
@@ -55,7 +59,6 @@ fn print_report<T: Reportable>(r: &T) {
     println!("{}", r.report());
 }
 
-//fn wc<'a>(s: &'a str) -> TextStats<'a> {
 impl<'a> TextStats<'a> {
     pub fn new(s: &'a str) -> Self {
         let mut state = State::NotInWord;
@@ -87,28 +90,59 @@ impl<'a> TextStats<'a> {
     }
 }
 
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_2_lines() {
+        let text_stats = TextStats::new("If lose mittens, get\nno pie.\n");
+        assert_eq!(text_stats, TextStats {s: "If lose mittens, get\nno pie.\n", num_lines: 2, num_words: 6});
+        assert_eq!(text_stats.summary(), "If lose mittens, get");
+        assert_eq!(text_stats.report(), "Lines: 2
+Words: 6
+Preview: If lose mittens, get...\n")
+    }
+    
+    #[test]
+    fn test_2_words() {
+        let text_stats = TextStats::new("Two words.");
+        assert_eq!(text_stats, TextStats {s: "Two words.", num_lines: 1, num_words: 2});
+        assert_eq!(text_stats.summary(), "Two words.");
+        assert_eq!(text_stats.preview(), "Two words....");
+    }
+
+    #[test]
+    fn test_5_words() {
+        let text_stats = TextStats::new("This one is five words.");
+        assert_eq!(text_stats, TextStats {s: "This one is five words.", num_lines: 1, num_words: 5});
+        assert_eq!(text_stats.preview(), "This one is five...");
+    }
+
+    #[test]
+    fn test_4_words() {
+        let text_stats = TextStats::new("This one is four.");
+        assert_eq!(text_stats, TextStats {s: "This one is four.", num_lines: 1, num_words: 4});
+        assert_eq!(text_stats.preview(), "This one is four....");
+    }
+
+    #[test]
+    fn test_empty() {
+        let text_stats = TextStats::new("");
+        assert_eq!(text_stats, TextStats {s: "", num_lines: 0, num_words: 0});
+        assert_eq!(text_stats.preview(), "...");
+    }
+
+    #[test]
+    fn test_partial_line() {
+        let text_stats = TextStats::new("Line with terminator\nLine without terminator");
+        assert_eq!(text_stats, TextStats {s: "Line with terminator\nLine without terminator", num_lines: 2, num_words: 6});
+    }
+
+}
+
 fn main () {
     let text_stats = TextStats::new("If lose mittens, get\nno pie.\n");
-    println!("{:#?}", text_stats);
-    println!("{}", text_stats.summary());
-    print_report(&text_stats);
-    println!();
-    let text_stats = TextStats::new("Two words.");
-    println!("{:#?}", text_stats);
-    println!("{}", text_stats.summary());
-    print_report(&text_stats);
-    println!();
-    let text_stats = TextStats::new("This one is five words.");
-    println!("{:#?}", text_stats);
-    println!("{}", text_stats.summary());
-    print_report(&text_stats);
-    println!();
-    let text_stats = TextStats::new("This one is four.");
-    println!("{:#?}", text_stats);
-    println!("{}", text_stats.summary());
-    print_report(&text_stats);
-    println!();
-    let text_stats = TextStats::new("");
     println!("{:#?}", text_stats);
     println!("{}", text_stats.summary());
     print_report(&text_stats);
