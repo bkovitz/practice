@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/Users/bkovitz/Library/CloudStorage/GoogleDrive-bkovitz@gmail.com/My Drive/text'
+let g:netrw_dirhist_3='/Users/bkovitz/Library/CloudStorage/GoogleDrive-bkovitz@gmail.com/My Drive'
+let g:netrw_dirhist_2='/Users/bkovitz/Library/CloudStorage/GoogleDrive-bkovitz@gmail.com/My Drive/Readings'
+let g:netrw_dirhist_1='/Users/bkovitz/Library/CloudStorage/GoogleDrive-bkovitz@gmail.com/My Drive'
