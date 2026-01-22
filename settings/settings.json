@@ -1,0 +1,58 @@
+{
+    "window.commandCenter": true,
+    "lldb.suppressUpdateNotifications": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.matchBrackets": "never",
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.renderLineHighlight": "none",
+    "editor.semanticTokenColorCustomizations": {
+        "rules": {
+            "*.mutable": {
+              "fontStyle": "", // underline is the default
+            },
+        }
+    },
+    "editor.quickSuggestionsDelay": 700,
+    "editor.quickSuggestions": {
+        "other": "off"
+    },
+    "editor.suggestOnTriggerCharacters": false,
+    "inlineChat.lineNaturalLanguageHint": false,
+    "accessibility.verbosity.inlineChat": false,
+    "editor.guides.indentation": false,
+    "editor.selectionHighlight": false,
+    "editor.guides.highlightActiveBracketPair": false,
+    "editor.semanticHighlighting.enabled": false,
+    "editor.occurrencesHighlight": "off",
+    "cursor.cpp.disabledLanguages": [
+        "markdown",
+        "plaintext",
+        "rust"
+    ],
+    "remote.SSH.remotePlatform": {
+        "nautilus-hub": "linux"
+    },
+    //"extensions.gallery.serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
+    "errorLens.delay": 5000,
+    "makefile.configureOnOpen": true,
+    "editor.stickyScroll.enabled": false,
+    "editor.cursorSurroundingLines": 1,
+    "multiCommand.commands": [
+        {
+            "command": "multiCommand.custom_cursor",
+            "sequence": [
+                "editor.action.acceptCursorTabSuggestion",
+                "editor.cpp.disableenabled"
+            ]
+        },
+    ],
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+    "chat.viewSessions.orientation": "stacked",
+    "rust-analyzer.testExplorer": true
+}
