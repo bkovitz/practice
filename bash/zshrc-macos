@@ -1,0 +1,120 @@
+set -o vi
+setopt hist_ignore_all_dups interactivecomments
+
+# Force TeX Live 2020 to come ahead of Tex Live 2023 (/Library/TeX/texbin)
+#export PATH=/usr/local/texlive/2020/bin/x86_64-darwin:$PATH
+#export PATH=/usr/local/texlive/2023/bin/x86_64-darwin:$PATH
+export PATH=/usr/local/texlive/2025/bin/x86_64-darwin:$PATH
+
+export MACVIM=/Applications/MacVim.app/Contents/bin
+#export PATH=~/bin:~/Library/Python/3.8/bin:$MACVIM:$PATH
+export PATH=~/bin:$MACVIM:$PATH
+
+# Homebrew
+export HOMEBREW_PREFIX="/opt/homebrew";
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+export HOMEBREW_REPOSITORY="/opt/homebrew";
+export PATH="/opt/homebrew/opt/qt6/bin:/opt/homebrew/opt/tcl-tk/bin:/opt/homebrew/opt/python@3.10/Frameworks/Python.framework/Versions/3.10/bin:/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+
+# Force bison and yacc from Homebrew ahead of everything else
+export PATH=$HOMEBREW_PREFIX/opt/bison/bin:$PATH
+
+# iCloud
+export IC=~/Library/Mobile\ Documents/com~apple~CloudDocs/
+
+# Inkscape
+export PATH=/Applications/Inkscape.app/Contents/MacOS:$PATH
+
+#export FARG=129.79.203.158
+export FARG=129.79.203.140
+export SILO=silo.cs.indiana.edu
+#export DH=willamina.dreamhost.com
+export DH=pdx1-shared-a1-36.dreamhost.com
+
+export B=/Volumes/biryani  # external SSD drive
+export b=$B/Users/bkovitz
+export rec=$b/recordings
+
+export K=cal-poly-humboldt-kode   # Nautilus namespace
+
+export WORDS=/usr/share/dict/words
+
+export G='/Users/bkovitz/Google Drive/My Drive'
+export CPH=$G/'Cal Poly Humboldt'
+export CS243=$G/'Cal Poly Humboldt/CS243'
+export CS312=$G/'Cal Poly Humboldt/Fa2023/CS312'
+export CS111=$G/'Cal Poly Humboldt/CS111'
+export OLD111=$G/'Cal Poly Humboldt/CS111/111-for-ben'
+export OLD243=$G/'Cal Poly Humboldt/Fa2023/CS243'
+export FA23=$G/'Cal Poly Humboldt/Fa2023'
+export SP24=$CPH/Sp2024
+export FA24=$CPH/Fa2024
+export SP25=$CPH/Sp2025
+export MATH253=$FA24/MATH253
+export CS243=$SP25/CS243
+export CS356=$SP25/CS356
+export REC=$CPH/Recommendations
+
+#if [ `whoami` = root ]
+#then
+#    export PS1='%m %1~# '
+#else
+#    export PS1='%m %1~$ '
+#fi
+export PS1='%m %30<..<%~%(!.#.$) '
+
+autoload -Uz compinit && compinit
+
+alias py=python3
+alias ls='ls -FC'
+alias vi='gvim'
+
+export PATH=~/.local/bin:$PATH  # to get Poetry
+
+PATH="/Users/bkovitz/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/bkovitz/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/bkovitz/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/bkovitz/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/bkovitz/perl5"; export PERL_MM_OPT;
+
+export PATH='/Applications/Racket v8.11.1/bin':$PATH
+
+export CXXFLAGS='-O3 --std=c++20'
+
+[ -f "/Users/bkovitz/.ghcup/env" ] && . "/Users/bkovitz/.ghcup/env" # ghcup-env
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Java -- Corretto 23
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-23.jdk/Contents/Home
+# export PATH="/Volumes/biryani/miniconda3/bin:$PATH"  # commented out by conda initialize  # commented out by conda initialize
+
+# THE SLOW PART OF THIS SCRIPT IS THE CONDA INITIALIZATION
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Volumes/biryani/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Volumes/biryani/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/Volumes/biryani/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Volumes/biryani/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# bun completions
+[ -s "/Users/bkovitz/.bun/_bun" ] && source "/Users/bkovitz/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Rust
+. "$HOME/.cargo/env"

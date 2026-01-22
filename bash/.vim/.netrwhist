@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =7
+let g:netrw_dirhist_7='/Users/bkovitz/github/lsd-challenge'
+let g:netrw_dirhist_6='/Users/bkovitz/github/lsd-challenge/cp3'
+let g:netrw_dirhist_5='/opt/homebrew/Cellar/python@3.13/3.13.2/Frameworks/Python.framework/Versions/3.13/lib/python3.13/ctypes'
+let g:netrw_dirhist_4='/Users/bkovitz/Google Drive/text/linkedin'
+let g:netrw_dirhist_3='/Users/bkovitz/Google Drive/text'
+let g:netrw_dirhist_2='/Users/bkovitz/github/lsd-challenge/.git'
+let g:netrw_dirhist_1='/Volumes/ESD-USB'
+let g:netrw_dirhist_0='/Volumes'
+let g:netrw_dirhist_9='/Users/bkovitz/github/diss/chapters'
+let g:netrw_dirhist_8='/Users/bkovitz/Downloads/wc++'
